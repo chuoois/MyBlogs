@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Button, Card, Tag, SectionTitle } from "../ui"
-import aboutmeService from "../../services/auboutme.services";
+import adminService from "../../services/admin.services"; 
 
 export const Home = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -17,7 +17,7 @@ export const Home = () => {
   useEffect(() => {
     const fetchAboutMe = async () => {
       try {
-        const res = await aboutmeService.getAll()
+        const res = await adminService.getAll()
         if (res && res.length > 0) {
           setAboutme(res[0]) // chỉ có 1 object
         }

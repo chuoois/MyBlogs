@@ -7,7 +7,7 @@ const api = axios.create({
     },
 });
 
-const aboutmeService = {
+const adminService = {
     // Lấy toàn bộ dữ liệu
     getAll: async () => {
         const response = await api.get('/aboutme');
@@ -33,4 +33,4 @@ const aboutmeService = {
     },
 };
 
-export default aboutmeService;
+export default adminService;

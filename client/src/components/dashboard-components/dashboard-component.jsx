@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { LogOut, Info, Folder, FileText, Trash2, Edit, Plus } from "lucide-react";
-import aboutmeService from "../../services/auboutme.services"; 
+import adminService from "../../services/admin.services"; 
 
 export const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("about");
@@ -30,7 +30,7 @@ export const Dashboard = () => {
 
   const fetchAboutme = async () => {
     try {
-      const data = await aboutmeService.getAll();
+      const data = await adminService.getAll();
       setAboutme(data);
     } catch (error) {
       console.error("❌ Lỗi fetch About Me:", error);
@@ -40,7 +40,7 @@ export const Dashboard = () => {
   // 🔹 Save khi create
   const handleCreate = async () => {
     try {
-      const newItem = await aboutmeService.create(formData);
+      const newItem = await adminService.create(formData);
       setAboutme([newItem.data]); // server trả về new data
       setIsCreating(false);
     } catch (error) {
@@ -51,7 +51,7 @@ export const Dashboard = () => {
   // 🔹 Update
   const handleUpdate = async () => {
     try {
-      await aboutmeService.update(formData.id, formData);
+      await adminService.update(formData.id, formData);
       fetchAboutme(); // reload lại
       setIsEditing(false);
     } catch (error) {
@@ -63,7 +63,7 @@ export const Dashboard = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Bạn có chắc muốn xóa About Me?")) {
       try {
-        await aboutmeService.delete(id);
+        await adminService.delete(id);
         setAboutme([]);
       } catch (error) {
         console.error("❌ Lỗi delete About Me:", error);
