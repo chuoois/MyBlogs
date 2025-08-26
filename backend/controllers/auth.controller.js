@@ -24,8 +24,7 @@ class AuthController {
                 {
                     id: user.id,
                     username: user.username,
-                    email: user.email,
-                    role: user.role,
+                    email: user.email
                 },
                 env.JWT_SECRET,
                 { expiresIn: env.EXPIRES_IN }

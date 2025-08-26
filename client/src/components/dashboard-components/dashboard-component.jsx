@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { LogOut, Info, Folder, FileText, Trash2, Edit, Plus } from "lucide-react";
+import aboutmeService from "../../services/auboutme.services"; 
 
 export const Dashboard = () => {
   const [activeMenu, setActiveMenu] = useState("about");
@@ -11,33 +12,62 @@ export const Dashboard = () => {
     { id: "logout", title: "Logout", icon: <LogOut className="w-5 h-5" /> },
   ];
 
-  const [aboutme, setAboutme] = useState([]); 
+  const [aboutme, setAboutme] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [formData, setFormData] = useState({
-    id: 1,
+    id: null,
     descriptions: "",
     skill_tag: [],
     skill_card: [],
     created_at: new Date().toISOString(),
   });
 
-  // Save khi create
-  const handleCreate = () => {
-    setAboutme([formData]);
-    setIsCreating(false);
+  // 🔹 Lấy dữ liệu từ API khi load trang
+  useEffect(() => {
+    fetchAboutme();
+  }, []);
+
+  const fetchAboutme = async () => {
+    try {
+      const data = await aboutmeService.getAll();
+      setAboutme(data);
+    } catch (error) {
+      console.error("❌ Lỗi fetch About Me:", error);
+    }
   };
 
-  // Update
-  const handleUpdate = () => {
-    setAboutme([formData]);
-    setIsEditing(false);
+  // 🔹 Save khi create
+  const handleCreate = async () => {
+    try {
+      const newItem = await aboutmeService.create(formData);
+      setAboutme([newItem.data]); // server trả về new data
+      setIsCreating(false);
+    } catch (error) {
+      console.error("❌ Lỗi tạo About Me:", error);
+    }
   };
 
-  // Delete
-  const handleDelete = () => {
+  // 🔹 Update
+  const handleUpdate = async () => {
+    try {
+      await aboutmeService.update(formData.id, formData);
+      fetchAboutme(); // reload lại
+      setIsEditing(false);
+    } catch (error) {
+      console.error("❌ Lỗi update About Me:", error);
+    }
+  };
+
+  // 🔹 Delete
+  const handleDelete = async (id) => {
     if (window.confirm("Bạn có chắc muốn xóa About Me?")) {
-      setAboutme([]);
+      try {
+        await aboutmeService.delete(id);
+        setAboutme([]);
+      } catch (error) {
+        console.error("❌ Lỗi delete About Me:", error);
+      }
     }
   };
 
@@ -257,7 +287,7 @@ export const Dashboard = () => {
                         <Edit size={16} /> Edit
                       </button>
                       <button
-                        onClick={handleDelete}
+                        onClick={() => handleDelete(item.id)}
                         className="flex items-center gap-1 px-3 py-1 border rounded hover:bg-gray-100"
                       >
                         <Trash2 size={16} /> Delete
