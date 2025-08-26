@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Mail, Lock } from "lucide-react";
-import { Button } from "../ui";
+import authService from "../../services/auth.services";
 
 export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -10,11 +10,23 @@ export const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Đăng nhập:", formData);
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const response = await authService.login(formData);
+    // Nếu API trả về token hoặc user info
+    console.log("Đăng nhập thành công:", response.data);
     alert("Đăng nhập thành công!");
-  };
+    // Có thể lưu token vào localStorage hoặc redirect
+    localStorage.setItem("token", response.data.token);
+    // Ví dụ redirect sang trang dashboard
+    // window.location.href = "/dashboard";
+  } catch (error) {
+    console.error("Lỗi đăng nhập:", error.response?.data || error.message);
+    alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
+  }
+};
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -74,9 +86,9 @@ export const Login = () => {
           </div>
 
           {/* Submit */}
-          <Button type="submit" variant="primary" className="w-full py-2">
+          <button type="submit" className="w-full py-2 bg-blue-600 text-white rounded-lg">
             Đăng Nhập
-          </Button>
+          </button>
         </form>
       </div>
     </div>
