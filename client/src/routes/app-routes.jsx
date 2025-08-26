@@ -1,7 +1,7 @@
 import React from "react"
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { HomeLayout, AuthLayout } from "../components/layout";
-import { HomePage, LoginPage } from "../pages";
+import { HomePage, LoginPage, DashboardPage } from "../pages";
 
 export const router = createBrowserRouter([
     {
@@ -11,6 +11,10 @@ export const router = createBrowserRouter([
             {
                 path: "login",
                 element: <LoginPage />,
+            },
+            {
+                path: "dashboard",
+                element: <DashboardPage />,
             }
         ]
 
