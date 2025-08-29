@@ -12,6 +12,16 @@ class BlogRepository {
     }
   }
 
+  static async findById(id) {
+    try {
+      const sql = `SELECT * FROM ${BlogModel.table} WHERE id = ? LIMIT 1`;
+      const [rows] = await connection.promise().query(sql, [id]);
+      return rows.length > 0 ? rows[0] : null;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   static async create(data) {
     try {
       const sql = `INSERT INTO ${BlogModel.table} (title, descriptions, img) VALUES (?, ?, ?)`;

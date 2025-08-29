@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Button, Card, Tag, SectionTitle } from "../ui"
-import adminService from "../../services/admin.services"; 
+import adminService from "../../services/admin.services";
 
 export const Home = () => {
   const [isVisible, setIsVisible] = useState(false)
@@ -9,26 +9,38 @@ export const Home = () => {
   const [isDeleting, setIsDeleting] = useState(false)
   const [typeSpeed, setTypeSpeed] = useState(150)
 
+  // State
   const [aboutme, setAboutme] = useState(null)
+  const [projects, setProjects] = useState([])
+  const [blogs, setBlogs] = useState([])
 
   const dynamicWords = ["Palala", "Công nghệ", "Sáng tạo", "Đam mê"]
 
-  // Lấy dữ liệu từ API
+  // Fetch API
   useEffect(() => {
-    const fetchAboutMe = async () => {
+    const fetchData = async () => {
       try {
-        const res = await adminService.getAll()
-        if (res && res.length > 0) {
-          setAboutme(res[0]) // chỉ có 1 object
+        // About Me
+        const aboutRes = await adminService.aboutme.getAll()
+        if (aboutRes && aboutRes.length > 0) {
+          setAboutme(aboutRes[0])
         }
+
+        // Projects
+        const projectRes = await adminService.projects.getAll()
+        setProjects(projectRes)
+
+        // Blogs
+        const blogRes = await adminService.blogs.getAll()
+        setBlogs(blogRes)
       } catch (err) {
-        console.error("Lỗi khi fetch aboutme:", err)
+        console.error("Lỗi khi fetch dữ liệu:", err)
       }
     }
-    fetchAboutMe()
+    fetchData()
   }, [])
 
-  // Animation mount + typewriter
+  // Typewriter effect
   useEffect(() => {
     setTimeout(() => setIsVisible(true), 100)
 
@@ -57,6 +69,7 @@ export const Home = () => {
 
   return (
     <div className="min-h-screen bg-white">
+      {/* Hero Section */}
       <section id="home" className="pt-32 pb-20 px-6 relative overflow-hidden">
         {/* Background Effects */}
         <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-white to-purple-50/30"></div>
@@ -67,22 +80,26 @@ export const Home = () => {
         <div className="container mx-auto max-w-4xl relative z-10">
           <div className="space-y-8">
             <div>
-              <h1 className={`text-6xl md:text-7xl font-bold text-gray-900 leading-tight mb-6 transition-all duration-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}>
+              <h1
+                className={`text-6xl md:text-7xl font-bold text-gray-900 leading-tight mb-6 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                  }`}
+              >
                 <span className="block overflow-hidden">
-                  <span className={`block transition-all duration-700 delay-200 ${isVisible ? 'translate-y-0' : 'translate-y-full'
-                    }`}>
+                  <span
+                    className={`block transition-all duration-700 delay-200 ${isVisible ? "translate-y-0" : "translate-y-full"
+                      }`}
+                  >
                     Chào mừng đến với
                   </span>
                 </span>
                 <span className="relative inline-block">
                   <span
-                    className={`text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 transition-all duration-700 delay-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'
+                    className={`text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 transition-all duration-700 delay-500 ${isVisible ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
                       }`}
                     style={{
-                      animation: 'gradient-x 3s ease infinite',
-                      minWidth: '400px',
-                      display: 'inline-block'
+                      animation: "gradient-x 3s ease infinite",
+                      minWidth: "400px",
+                      display: "inline-block",
                     }}
                   >
                     {displayText}
@@ -90,27 +107,32 @@ export const Home = () => {
                     <span
                       className="inline-block w-1 h-full bg-blue-600 ml-1"
                       style={{
-                        animation: 'blink 1s infinite',
-                        verticalAlign: 'top'
+                        animation: "blink 1s infinite",
+                        verticalAlign: "top",
                       }}
                     ></span>
                   </span>
                 </span>
               </h1>
 
-              <p className={`text-2xl text-gray-600 leading-relaxed max-w-3xl transition-all duration-1000 delay-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-                }`}>
+              <p
+                className={`text-2xl text-gray-600 leading-relaxed max-w-3xl transition-all duration-1000 delay-700 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                  }`}
+              >
                 <span className="relative">
                   Khám phá thế giới công nghệ qua những dự án sáng tạo và chia sẻ kiến thức lập trình.
-                  <span className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform origin-left transition-all duration-1000 delay-1000 scale-x-0"
-                    style={{ transform: isVisible ? 'scaleX(1)' : 'scaleX(0)' }}
+                  <span
+                    className="absolute -bottom-2 left-0 w-full h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 transform origin-left transition-all duration-1000 delay-1000 scale-x-0"
+                    style={{ transform: isVisible ? "scaleX(1)" : "scaleX(0)" }}
                   ></span>
                 </span>
               </p>
             </div>
 
-            <div className={`flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-1000 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-              }`}>
+            <div
+              className={`flex flex-col sm:flex-row gap-4 transition-all duration-1000 delay-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+                }`}
+            >
               <Button variant="primary" href="#projects" className="group">
                 <span className="mr-2">Xem dự án</span>
                 <span className="transform transition-transform group-hover:translate-x-1">→</span>
@@ -119,27 +141,6 @@ export const Home = () => {
                 <span className="mr-2">Về tôi</span>
                 <span className="transform transition-transform group-hover:scale-110">👋</span>
               </Button>
-            </div>
-
-            {/* Floating Elements */}
-            <div className="absolute top-1/4 right-1/4 opacity-20">
-              <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce animation-delay-1000"></div>
-            </div>
-            <div className="absolute top-3/4 left-1/4 opacity-20">
-              <div className="w-6 h-6 bg-purple-500 rounded-full animate-bounce animation-delay-2000"></div>
-            </div>
-            <div className="absolute top-1/2 right-1/6 opacity-20">
-              <div className="w-3 h-3 bg-pink-500 rounded-full animate-bounce animation-delay-3000"></div>
-            </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
-          <div className="flex flex-col items-center space-y-2 text-gray-400 animate-bounce">
-            <span className="text-sm">Cuộn xuống</span>
-            <div className="w-6 h-10 border-2 border-gray-300 rounded-full relative">
-              <div className="w-1 h-3 bg-gray-400 rounded-full absolute top-2 left-1/2 transform -translate-x-1/2 animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -157,19 +158,17 @@ export const Home = () => {
                   {aboutme.descriptions}
                 </p>
                 <div className="flex flex-wrap gap-3">
-                  {aboutme.skill_tag.map((tag, i) => (
-                    <Tag key={i} variant="blue">{tag}</Tag>
+                  {aboutme.skill_tag?.map((tag, i) => (
+                    <Tag key={i} variant="blue">
+                      {tag}
+                    </Tag>
                   ))}
                 </div>
               </div>
 
               <div className="grid grid-cols-1 gap-8">
-                {aboutme.skill_card.map((skill, i) => (
-                  <SkillCard
-                    key={i}
-                    title={skill.title}
-                    description={skill.detail}
-                  />
+                {aboutme.skill_card?.map((skill, i) => (
+                  <SkillCard key={i} title={skill.title} description={skill.detail} />
                 ))}
               </div>
             </div>
@@ -182,116 +181,139 @@ export const Home = () => {
       {/* Projects Section */}
       <section id="projects" className="py-24 px-6">
         <div className="container mx-auto max-w-6xl">
-          <SectionTitle
-            title="Dự án nổi bật"
-            subtitle="Một số dự án tôi đã thực hiện gần đây"
-          />
+          <SectionTitle title="Dự án nổi bật" subtitle="Một số dự án tôi đã thực hiện gần đây" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                id: 1,
-                title: "E-commerce Platform",
-                description: "Nền tảng thương mại điện tử với giao diện hiện đại và tính năng thanh toán tích hợp.",
-                image: "bg-gradient-to-br from-blue-50 to-indigo-100",
-                tags: ["React", "Node.js"]
-              },
-              {
-                id: 2,
-                title: "Task Management App",
-                description: "Ứng dụng quản lý công việc với giao diện trực quan và khả năng cộng tác nhóm.",
-                image: "bg-gradient-to-br from-green-50 to-emerald-100",
-                tags: ["Vue.js", "Express"]
-              },
-              {
-                id: 3,
-                title: "Portfolio Website",
-                description: "Website portfolio cá nhân với thiết kế responsive và tối ưu SEO.",
-                image: "bg-gradient-to-br from-purple-50 to-pink-100",
-                tags: ["Next.js", "Tailwind"]
-              }
-            ].map((project) => (
-              <Card key={project.id} className="group overflow-hidden">
-                <div className={`h-48 ${project.image} relative`}>
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-200"></div>
-                </div>
-                <div className="p-6">
-                  <h3 className="font-semibold text-gray-900 mb-2 text-lg">{project.title}</h3>
-                  <p className="text-gray-600 mb-4 text-sm leading-relaxed">
-                    {project.description}
-                  </p>
-                  <div className="flex gap-2">
-                    {project.tags.map((tag, index) => (
-                      <Tag key={index} variant={index === 0 ? "blue" : "default"}>{tag}</Tag>
-                    ))}
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
+          {projects.length > 0 ? (
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {projects.slice(0, 3).map((project) => (   // hiển thị 3 dự án gần nhất
+                  <Card key={project.id} className="group overflow-hidden flex flex-col">
+                    <div className="h-48 relative bg-gray-100">
+                      {project.image_url ? (
+                        <img
+                          src={project.image_url}
+                          alt={project.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-gray-400">
+                          No Image
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="p-6 flex flex-col flex-grow">
+                      <h3 className="font-semibold text-gray-900 mb-2 text-lg">{project.title}</h3>
+                      <p className="text-gray-600 mb-4 text-sm leading-relaxed flex-grow">
+                        {project.description}
+                      </p>
+
+                      <div className="flex gap-2 flex-wrap mb-4">
+                        {project.technologies?.map((tag, index) => (
+                          <Tag key={index} variant={index === 0 ? "blue" : "default"}>
+                            {tag}
+                          </Tag>
+                        ))}
+                      </div>
+
+                      <div className="flex justify-between items-center text-sm text-gray-500">
+                        <span>{new Date(project.created_at).toLocaleDateString("vi-VN")}</span>
+                        <div className="flex gap-4">
+                          {project.github_url && (
+                            <a
+                              href={project.github_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-blue-600 transition-colors"
+                            >
+                              GitHub
+                            </a>
+                          )}
+                          {project.live_url && (
+                            <a
+                              href={project.live_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="hover:text-green-600 transition-colors"
+                            >
+                              Live
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+
+              {/* nút xem thêm */}
+              <div className="mt-10 text-center">
+                <Button variant="outline" href="https://github.com/chuoois" target="_blank" className="group">
+                  <span className="mr-2">Xem tất cả dự án</span>
+                  <span className="transform transition-transform group-hover:translate-x-1">→</span>
+                </Button>
+              </div>
+            </>
+          ) : (
+            <p className="text-gray-500">Đang tải dự án...</p>
+          )}
         </div>
       </section>
 
       {/* Blog Section */}
       <section id="blog" className="py-24 bg-gray-50 px-6">
         <div className="container mx-auto max-w-6xl">
-          <SectionTitle
-            title="Blog"
-            subtitle="Chia sẻ kiến thức và kinh nghiệm trong lập trình"
-          />
+          <SectionTitle title="Blog" subtitle="Chia sẻ kiến thức và kinh nghiệm trong lập trình" />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              {
-                id: 1,
-                title: "Tối ưu hiệu suất React Application",
-                excerpt: "Hướng dẫn các kỹ thuật tối ưu hiệu suất cho ứng dụng React, từ code splitting đến lazy loading...",
-                date: "15 tháng 12, 2024",
-                readTime: "5 phút đọc"
-              },
-              {
-                id: 2,
-                title: "Thiết kế responsive với Tailwind CSS",
-                excerpt: "Khám phá các best practices khi sử dụng Tailwind CSS để tạo ra giao diện responsive...",
-                date: "10 tháng 12, 2024",
-                readTime: "7 phút đọc"
-              },
-              {
-                id: 3,
-                title: "Deployment automation với GitHub Actions",
-                excerpt: "Hướng dẫn thiết lập CI/CD pipeline tự động với GitHub Actions cho dự án web...",
-                date: "5 tháng 12, 2024",
-                readTime: "10 phút đọc"
-              },
-              {
-                id: 4,
-                title: "TypeScript trong dự án React",
-                excerpt: "Lợi ích và cách tích hợp TypeScript vào dự án React để tăng tính bảo mật code...",
-                date: "1 tháng 12, 2024",
-                readTime: "8 phút đọc"
-              }
-            ].map((post) => (
-              <Card key={post.id} className="p-6">
-                <article>
-                  <h3 className="font-semibold text-gray-900 mb-3 text-lg leading-snug">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-600 mb-4 leading-relaxed">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex items-center space-x-4">
-                      <span>{post.date}</span>
-                      <span>{post.readTime}</span>
-                    </div>
-                    <a href="#" className="text-gray-900 hover:text-gray-600 transition-colors font-medium group">
-                      Đọc thêm <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
-                    </a>
+          {blogs.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {blogs.map((post) => (
+                <Card key={post.id} className="overflow-hidden">
+                  {post.image_url && (
+                    <img
+                      src={post.image_url}
+                      alt={post.title}
+                      className="w-full h-40 object-cover"
+                    />
+                  )}
+                  <div className="p-6">
+                    <article>
+                      <h3 className="font-semibold text-gray-900 mb-3 text-lg leading-snug">
+                        {post.title}
+                      </h3>
+                      <p className="text-gray-600 mb-4 leading-relaxed">{post.summary}</p>
+
+                      <div className="flex gap-2 flex-wrap mb-3">
+                        {post.tags?.map((tag, i) => (
+                          <Tag key={i} variant="blue">
+                            {tag}
+                          </Tag>
+                        ))}
+                      </div>
+
+                      <div className="flex items-center justify-between text-sm text-gray-500">
+                        <div className="flex items-center space-x-4">
+                          <span>{new Date(post.created_at).toLocaleDateString("vi-VN")}</span>
+                          <span>{post.published ? "Đã xuất bản" : "Nháp"}</span>
+                        </div>
+                        <a
+                          href={`/blog/${post.id}`}
+                          className="text-gray-900 hover:text-gray-600 transition-colors font-medium group"
+                        >
+                          Đọc thêm{" "}
+                          <span className="inline-block transition-transform group-hover:translate-x-1">
+                            →
+                          </span>
+                        </a>
+                      </div>
+                    </article>
                   </div>
-                </article>
-              </Card>
-            ))}
-          </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <p className="text-gray-500">Đang tải blog...</p>
+          )}
         </div>
       </section>
 
@@ -310,9 +332,7 @@ export const Home = () => {
           0%, 50% { opacity: 1; }
           51%, 100% { opacity: 0; }
         }
-        .animation-delay-1000 { animation-delay: 1s; }
         .animation-delay-2000 { animation-delay: 2s; }
-        .animation-delay-3000 { animation-delay: 3s; }
         .animation-delay-4000 { animation-delay: 4s; }
       `}</style>
     </div>

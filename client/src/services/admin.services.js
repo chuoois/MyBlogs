@@ -68,6 +68,10 @@ const adminService = {
             const response = await api.get('/blogs');
             return response.data;
         },
+        getById: async (id) => {
+            const response = await api.get(`/blogs/${id}`);
+            return response.data;
+        },
         create: async (data) => {
             const response = await api.post('/blogs', data);
             return response.data;

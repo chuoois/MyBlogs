@@ -1,33 +1,43 @@
 import React from "react"
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import { HomeLayout, AuthLayout } from "../components/layout";
+import { createBrowserRouter } from "react-router-dom";
+import PrivateRoute from "./private-route";
+import { HomeLayout, AuthLayout, AdminLayout } from "../components/layout";
 import { HomePage, LoginPage, DashboardPage } from "../pages";
 
 export const router = createBrowserRouter([
-    {
-        path: "/admin",
-        element: <AuthLayout />,
+  {
+    path: "/auth",
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "login",
+        element: <LoginPage />,
+      },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminLayout />,
+    children: [
+      {
+        element: <PrivateRoute />, 
         children: [
-            {
-                path: "login",
-                element: <LoginPage />,
-            },
-            {
-                path: "dashboard",
-                element: <DashboardPage />,
-            }
-        ]
-
-    },
-    {
+          {
+            path: "dashboard",
+            element: <DashboardPage />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: "/",
+    element: <HomeLayout />,
+    children: [
+      {
         path: "/",
-        element: <HomeLayout />,
-        children: [
-            {
-                path: "/",
-                element: <HomePage />,
-            }
-        ]
-
-    }
+        element: <HomePage />,
+      },
+    ],
+  },
 ]);

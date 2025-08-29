@@ -32,6 +32,9 @@ router.delete('/projects/:id', authenticateToken, ProjectController.delete);
 // GET /api/blogs
 router.get('/blogs', BlogController.getAll);
 
+// GET /api/blogs/:id
+router.get('/blogs/:id', BlogController.getById);
+
 // POST /api/blogs
 router.post('/blogs', authenticateToken, BlogController.create);
 

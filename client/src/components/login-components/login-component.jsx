@@ -17,10 +17,8 @@ const handleSubmit = async (e) => {
     // Nếu API trả về token hoặc user info
     console.log("Đăng nhập thành công:", response.data);
     alert("Đăng nhập thành công!");
-    // Có thể lưu token vào localStorage hoặc redirect
     localStorage.setItem("token", response.data.token);
-    // Ví dụ redirect sang trang dashboard
-    // window.location.href = "/dashboard";
+    window.location.href = "/admin/dashboard";
   } catch (error) {
     console.error("Lỗi đăng nhập:", error.response?.data || error.message);
     alert("Đăng nhập thất bại. Vui lòng kiểm tra lại email và mật khẩu.");
