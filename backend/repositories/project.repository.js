@@ -7,12 +7,7 @@ class ProjectRepository {
     try {
       const sql = `SELECT * FROM ${ProjectModel.table} ORDER BY created_at DESC`;
       const [rows] = await connection.promise().query(sql);
-
-      // parse JSON cho technologies (nếu có)
-      return rows.map((row) => ({
-        ...row,
-        technologies: row.technologies ? JSON.parse(row.technologies) : []
-      }));
+      return rows || [];
     } catch (err) {
       throw err;
     }

@@ -7,12 +7,7 @@ class BlogRepository {
     try {
       const sql = `SELECT * FROM ${BlogModel.table} ORDER BY created_at DESC`;
       const [rows] = await connection.promise().query(sql);
-
-      return rows.map((row) => ({
-        ...row,
-        tags: row.tags ? JSON.parse(row.tags) : [],
-        published: !!row.published, // convert 0/1 -> true/false
-      }));
+      return rows || [];
     } catch (err) {
       throw err;
     }
