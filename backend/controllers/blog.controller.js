@@ -35,11 +35,22 @@ class BlogController {
     // POST create
     static async create(req, res) {
         try {
-            const { title, descriptions, img } = req.body;
-            if (!title || !descriptions) {
-                return res.status(400).json({ message: 'title và descriptions là bắt buộc' });
+            const { title, content, summary, tags, image_url, published, created_at } = req.body;
+
+            if (!title || !content) {
+                return res.status(400).json({ message: 'title và content là bắt buộc' });
             }
-            const newBlog = await BlogRepository.create({ title, descriptions, img });
+
+            const newBlog = await BlogRepository.create({
+                title,
+                content,
+                summary,
+                tags,
+                image_url,
+                published: published ?? false,
+                created_at: created_at || new Date().toISOString(),
+            });
+
             res.status(201).json({ message: 'Thêm Blog thành công', data: newBlog });
         } catch (error) {
             console.error("❌ Lỗi create Blog:", error);
@@ -51,13 +62,21 @@ class BlogController {
     static async update(req, res) {
         try {
             const { id } = req.params;
-            const { title, descriptions, img } = req.body;
+            const { title, content, summary, tags, image_url, published } = req.body;
 
-            if (!title || !descriptions) {
-                return res.status(400).json({ message: 'title và descriptions là bắt buộc' });
+            if (!title || !content) {
+                return res.status(400).json({ message: 'title và content là bắt buộc' });
             }
 
-            const updated = await BlogRepository.update(id, { title, descriptions, img });
+            const updated = await BlogRepository.update(id, {
+                title,
+                content,
+                summary,
+                tags,
+                image_url,
+                published: published ?? false,
+            });
+
             if (!updated) {
                 return res.status(404).json({ message: 'Không tìm thấy Blog để cập nhật' });
             }

@@ -8,5 +8,8 @@ export const env = {
     PORT_SQL: process.env.PORT_SQL,
     PORT: process.env.PORT,
     JWT_SECRET: process.env.JWT_SECRET,
-    EXPIRES_IN: process.env.EXPIRES_IN
+    EXPIRES_IN: process.env.EXPIRES_IN,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET
 };

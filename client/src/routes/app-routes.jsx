@@ -2,7 +2,7 @@ import React from "react"
 import { createBrowserRouter } from "react-router-dom";
 import PrivateRoute from "./private-route";
 import { HomeLayout, AuthLayout, AdminLayout } from "../components/layout";
-import { HomePage, LoginPage, DashboardPage } from "../pages";
+import { HomePage, LoginPage, DashboardPage, BlogDetailPage } from "../pages";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +37,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <HomePage />,
+      },
+      {
+        path: "blog/:id",
+        element: <BlogDetailPage />,
       },
     ],
   },

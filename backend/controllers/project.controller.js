@@ -18,11 +18,22 @@ class ProjectController {
     // POST create
     static async create(req, res) {
         try {
-            const { title, descriptions, frontend_backend_tag, readme } = req.body;
-            if (!title || !descriptions) {
-                return res.status(400).json({ message: 'title và descriptions là bắt buộc' });
+            const { title, description, technologies, github_url, live_url, image_url, created_at } = req.body;
+
+            if (!title || !description) {
+                return res.status(400).json({ message: 'title và description là bắt buộc' });
             }
-            const newProject = await ProjectRepository.create({ title, descriptions, frontend_backend_tag, readme });
+
+            const newProject = await ProjectRepository.create({
+                title,
+                description,
+                technologies,
+                github_url,
+                live_url,
+                image_url,
+                created_at: created_at || new Date().toISOString(),
+            });
+
             res.status(201).json({ message: 'Thêm Project thành công', data: newProject });
         } catch (error) {
             console.error("❌ Lỗi create Project:", error);
@@ -34,13 +45,21 @@ class ProjectController {
     static async update(req, res) {
         try {
             const { id } = req.params;
-            const { title, descriptions, frontend_backend_tag, readme } = req.body;
+            const { title, description, technologies, github_url, live_url, image_url } = req.body;
 
-            if (!title || !descriptions) {
-                return res.status(400).json({ message: 'title và descriptions là bắt buộc' });
+            if (!title || !description) {
+                return res.status(400).json({ message: 'title và description là bắt buộc' });
             }
 
-            const updated = await ProjectRepository.update(id, { title, descriptions, frontend_backend_tag, readme });
+            const updated = await ProjectRepository.update(id, {
+                title,
+                description,
+                technologies,
+                github_url,
+                live_url,
+                image_url,
+            });
+
             if (!updated) {
                 return res.status(404).json({ message: 'Không tìm thấy Project để cập nhật' });
             }
