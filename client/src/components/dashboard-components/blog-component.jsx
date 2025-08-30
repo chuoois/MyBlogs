@@ -311,15 +311,20 @@ export const Blogs = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">URL hình ảnh</label>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Upload Ảnh</label>
                       <input
-                        type="url"
+                        type="file"
+                        accept="image/*"
                         className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        value={formData.image_url}
-                        onChange={(e) =>
-                          setFormData({ ...formData, image_url: e.target.value })
-                        }
+                        onChange={handleImageChange}
                       />
+                      {formData.image_url && (
+                        <img
+                          src={formData.image_url}
+                          alt="Preview"
+                          className="mt-2 w-32 h-32 object-cover rounded"
+                        />
+                      )}
                     </div>
                   </div>
 
