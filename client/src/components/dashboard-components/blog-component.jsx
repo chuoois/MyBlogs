@@ -91,6 +91,35 @@ export const Blogs = () => {
     setEditId(blog.id);
   };
 
+  const handleUpload = async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "my_unsigned_preset"); // thay bằng preset của bạn
+
+    try {
+      const res = await fetch("https://api.cloudinary.com/v1_1/doevh5tms/image/upload", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      console.log("Ảnh đã upload:", data.secure_url);
+      return data.secure_url;
+    } catch (error) {
+      console.error("❌ Lỗi upload ảnh:", error);
+      return null;
+    }
+  };
+
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = await handleUpload(file);
+      if (imageUrl) {
+        setFormData({ ...formData, image_url: imageUrl });
+      }
+    }
+  };
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -169,17 +198,22 @@ export const Blogs = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">URL hình ảnh</label>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Upload Ảnh</label>
                 <input
-                  type="url"
+                  type="file"
+                  accept="image/*"
                   className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="https://..."
-                  value={formData.image_url}
-                  onChange={(e) =>
-                    setFormData({ ...formData, image_url: e.target.value })
-                  }
+                  onChange={handleImageChange}
                 />
+                {formData.image_url && (
+                  <img
+                    src={formData.image_url}
+                    alt="Preview"
+                    className="mt-2 w-32 h-32 object-cover rounded"
+                  />
+                )}
               </div>
+
             </div>
 
             <div className="flex items-center">
@@ -336,11 +370,10 @@ export const Blogs = () => {
                   <div className="flex justify-between items-start mb-3">
                     <div className="flex items-center gap-3">
                       <h3 className="text-xl font-bold text-gray-800">{blog.title}</h3>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        blog.published 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${blog.published
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                        }`}>
                         {blog.published ? 'Đã xuất bản' : 'Nháp'}
                       </span>
                     </div>
@@ -362,7 +395,7 @@ export const Blogs = () => {
 
                   <p className="text-gray-600 mb-3 font-medium">{blog.summary}</p>
                   <div className="text-gray-700 mb-4 prose max-w-none">
-                    {blog.content.length > 200 
+                    {blog.content.length > 200
                       ? blog.content.substring(0, 200) + '...'
                       : blog.content
                     }

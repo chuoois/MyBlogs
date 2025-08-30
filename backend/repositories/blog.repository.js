@@ -18,15 +18,8 @@ class BlogRepository {
     try {
       const sql = `SELECT * FROM ${BlogModel.table} WHERE id = ? LIMIT 1`;
       const [rows] = await connection.promise().query(sql, [id]);
-
       if (rows.length === 0) return null;
-
-      const blog = rows[0];
-      return {
-        ...blog,
-        tags: blog.tags ? JSON.parse(blog.tags) : [],
-        published: !!blog.published,
-      };
+      return rows[0];
     } catch (err) {
       throw err;
     }

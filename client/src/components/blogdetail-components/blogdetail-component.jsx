@@ -15,7 +15,8 @@ export const BlogDetail = () => {
         const fetchBlog = async () => {
             try {
                 setLoading(true)
-                const blogData = await adminService.blogs.getById(id) // ❌ bỏ "as string"
+                const blogData = await adminService.blogs.getById(id)
+                console.log("Fetched blog data:", blogData)
                 setBlog(blogData)
             } catch (err) {
                 setError("Không thể tải bài viết. Vui lòng thử lại sau.")
